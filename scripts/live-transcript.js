@@ -67,20 +67,59 @@ function registerSettings() {
 
   game.settings.register(MODULE_ID, "engine", {
     name: "Engine",
-    hint: "Use browser-webspeech for low-latency browser captions, or a local service engine name.",
+    hint: "Choose browser recognition for low-latency captions, or use a compatible local transcription service.",
     scope: "client",
     config: true,
     type: String,
+    choices: {
+      "browser-webspeech": "Browser Web Speech",
+      service: "Local Service"
+    },
     default: "browser-webspeech"
+  });
+
+  game.settings.register(MODULE_ID, "serviceEngine", {
+    name: "Service engine",
+    hint: "Engine name sent to the local transcription service when Engine is Local Service.",
+    scope: "client",
+    config: true,
+    type: String,
+    default: "default"
   });
 
   game.settings.register(MODULE_ID, "language", {
     name: "Language",
-    hint: "Language hint passed to engines that support it.",
+    hint: "Speech recognition language.",
     scope: "client",
     config: true,
     type: String,
-    default: globalThis.navigator?.language || "en-US"
+    choices: {
+      "browser-default": "Browser Default",
+      "en-US": "English (US)",
+      "en-GB": "English (UK)",
+      "ru-RU": "Russian",
+      "de-DE": "German",
+      "fr-FR": "French",
+      "es-ES": "Spanish",
+      "it-IT": "Italian",
+      "pt-BR": "Portuguese (Brazil)",
+      "pl-PL": "Polish",
+      "uk-UA": "Ukrainian",
+      "ja-JP": "Japanese",
+      "ko-KR": "Korean",
+      "zh-CN": "Chinese (Simplified)",
+      "custom": "Custom"
+    },
+    default: "browser-default"
+  });
+
+  game.settings.register(MODULE_ID, "customLanguage", {
+    name: "Custom language",
+    hint: "BCP 47 language tag used when Language is Custom, for example nl-NL or pt-PT.",
+    scope: "client",
+    config: true,
+    type: String,
+    default: ""
   });
 
   game.settings.register(MODULE_ID, "prompt", {
@@ -299,6 +338,26 @@ function isBrowserSpeechEngine(engine = engineName()) {
   return engine === "browser-webspeech" || engine === "webspeech" || engine === "browser";
 }
 
+function serviceEngineName(engine = engineName()) {
+  if (engine && !["browser-webspeech", "webspeech", "browser", "service", "local-service"].includes(engine)) {
+    return engine;
+  }
+  return String(game.settings.get(MODULE_ID, "serviceEngine") || "default").trim() || "default";
+}
+
+function browserLanguage() {
+  return String(globalThis.navigator?.language || "").trim() || "en-US";
+}
+
+function languageHint() {
+  const language = String(game.settings.get(MODULE_ID, "language") || "browser-default").trim();
+  if (!language || language === "browser-default") return browserLanguage();
+  if (language === "custom") {
+    return String(game.settings.get(MODULE_ID, "customLanguage") || "").trim() || browserLanguage();
+  }
+  return language;
+}
+
 function setStatus(text, level = "idle") {
   const status = state.root?.querySelector("[data-lt-status]");
   const dot = state.root?.querySelector("[data-lt-dot]");
@@ -361,7 +420,7 @@ function ensureRawTranscriptSession(event = {}) {
   beginRawTranscriptSession({
     sessionId: event.session_id || state.browserSessionId,
     engine: event.engine || engineName(),
-    language: event.meta?.language || game.settings.get(MODULE_ID, "language")
+    language: event.meta?.language || languageHint()
   });
 }
 
@@ -559,9 +618,10 @@ async function start() {
     setControls();
     connectEvents();
 
+    const engine = engineName();
     const body = {
-      engine: game.settings.get(MODULE_ID, "engine"),
-      language: game.settings.get(MODULE_ID, "language"),
+      engine: serviceEngineName(engine),
+      language: languageHint(),
       prompt: game.settings.get(MODULE_ID, "prompt")
     };
     const response = await fetch(`${serviceUrl()}/session/start`, {
@@ -635,11 +695,11 @@ function speechRecognitionClass() {
 }
 
 function speechLanguage() {
-  const language = String(game.settings.get(MODULE_ID, "language") || "ru").trim();
+  const language = languageHint();
   const normalized = language.toLowerCase();
   if (normalized === "ru") return "ru-RU";
   if (normalized === "en") return "en-US";
-  return language || "ru-RU";
+  return language || browserLanguage();
 }
 
 function startBrowserSpeech() {

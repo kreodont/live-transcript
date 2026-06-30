@@ -28,14 +28,15 @@ Then enable `Live Transcript` from Foundry's module settings.
 
 Recommended browser mode:
 
-- `Engine`: `browser-webspeech`
-- `Language`: defaults to the browser locale; set a speech locale such as `en-US`, `ru-RU`, or `de-DE` if needed.
+- `Engine`: `Browser Web Speech`
+- `Language`: `Browser Default`, or choose a speech locale such as `English (US)`, `Russian`, or `German`.
+- `Custom language`: optional BCP 47 tag such as `nl-NL` or `pt-PT` when `Language` is `Custom`.
 
 Browser speech recognition requires a supported browser, practically Chrome or Edge. Depending on the browser, audio may be processed by the browser vendor's speech service.
 
 ## Local Service Mode
 
-For external engines, set `Engine` to the service engine name and run a compatible service at `Service URL`, normally:
+For external engines, set `Engine` to `Local Service`, set `Service engine` to the backend engine name, and run a compatible service at `Service URL`, normally:
 
 ```text
 http://127.0.0.1:8798
