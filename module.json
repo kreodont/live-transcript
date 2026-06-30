@@ -1,0 +1,22 @@
+{
+  "id": "live-transcript",
+  "title": "Live Transcript",
+  "description": "Live speech transcription overlay for Foundry VTT with optional raw transcript journaling.",
+  "authors": [
+    {
+      "name": "Dmitri Masanov"
+    }
+  ],
+  "version": "0.2.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "14"
+  },
+  "esmodules": [
+    "scripts/live-transcript.js"
+  ],
+  "styles": [
+    "styles/live-transcript.css"
+  ],
+  "socket": true
+}
