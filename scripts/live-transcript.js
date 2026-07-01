@@ -58,7 +58,7 @@ Hooks.once("ready", () => {
 function registerSettings() {
   game.settings.register(MODULE_ID, "serviceUrl", {
     name: "Service URL",
-    hint: "Local transcription service URL. Usually http://127.0.0.1:8798.",
+    hint: "Advanced. Used only when Engine is Local Service. Usually http://127.0.0.1:8798.",
     scope: "client",
     config: true,
     type: String,
@@ -80,7 +80,7 @@ function registerSettings() {
 
   game.settings.register(MODULE_ID, "serviceEngine", {
     name: "Service engine",
-    hint: "Engine name sent to the local transcription service when Engine is Local Service.",
+    hint: "Advanced. Engine name sent to the service when Engine is Local Service.",
     scope: "client",
     config: true,
     type: String,
@@ -133,7 +133,7 @@ function registerSettings() {
 
   game.settings.register(MODULE_ID, "segmentMs", {
     name: "Segment length",
-    hint: "Audio segment length in milliseconds. Shorter is faster, longer is usually more accurate.",
+    hint: "Local Service only. Audio segment length in milliseconds. Shorter is faster, longer is usually more accurate.",
     scope: "client",
     config: true,
     type: Number,
