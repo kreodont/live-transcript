@@ -1,12 +1,26 @@
 #live-transcript {
   position: fixed;
-  top: 72px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  left: 18px;
+  transform: translateY(-50%);
   width: min(340px, calc(100vw - 36px));
   z-index: 110;
   pointer-events: none;
   font-family: var(--font-primary, "Signika", sans-serif);
+}
+
+#live-transcript[data-position="top-center"] {
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(340px, calc(100vw - 36px));
+}
+
+#live-transcript[data-position="left-center"] {
+  top: 50%;
+  left: 18px;
+  transform: translateY(-50%);
+  width: min(340px, calc(100vw - 36px));
 }
 
 #live-transcript[data-position="top-right"] {
@@ -143,6 +157,8 @@
 
 @media (max-width: 900px) {
   #live-transcript,
+  #live-transcript[data-position="left-center"],
+  #live-transcript[data-position="top-center"],
   #live-transcript[data-position="top-right"] {
     top: 18px;
     right: 18px;

@@ -12,7 +12,7 @@ It does not include an AI assistant, prompt button, model router, or campaign-sp
 - Editable GM transcript text area.
 - Optional broadcast of final transcript lines to players through Foundry sockets.
 - Optional raw transcript Journal entry for post-session summaries.
-- Draggable overlay with saved client-side position.
+- Draggable overlay with saved client-side position. The default position is left center.
 
 ## Installation
 

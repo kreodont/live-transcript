@@ -156,11 +156,12 @@ function registerSettings() {
     config: true,
     type: String,
     choices: {
+      "left-center": "Left center",
       "top-center": "Top center",
       "top-right": "Top right",
       "bottom-center": "Bottom center"
     },
-    default: "top-center",
+    default: "left-center",
     onChange: () => {
       void game.settings.set(MODULE_ID, "overlayCustomPosition", "").then(applyOverlayPosition);
     }
@@ -241,7 +242,7 @@ function applyOverlayPosition() {
   state.root.style.right = "";
   state.root.style.bottom = "";
   state.root.style.transform = "";
-  state.root.dataset.position = game.settings.get(MODULE_ID, "overlayPosition") || "top-center";
+  state.root.dataset.position = game.settings.get(MODULE_ID, "overlayPosition") || "left-center";
 }
 
 function overlayCustomPosition() {
